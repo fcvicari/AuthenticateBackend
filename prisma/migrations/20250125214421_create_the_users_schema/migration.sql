@@ -1,11 +1,11 @@
 -- CreateTable
 CREATE TABLE "Users" (
-    "id" STRING NOT NULL,
-    "name" STRING NOT NULL,
-    "email" STRING NOT NULL,
-    "password" STRING NOT NULL,
-    "avatar" STRING,
-    "active" BOOL NOT NULL DEFAULT false,
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "avatar" TEXT,
+    "active" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
