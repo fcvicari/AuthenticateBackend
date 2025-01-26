@@ -89,4 +89,29 @@ export class SingupController {
     return null;
   }
 
+  @Post('alterpass')
+  async postAlterPassword(@Body() body, @Query() query) {
+    const { token } = query;
+    const { password } = body;
+
+    const userToken = await this.userToken.findById({ id: token });
+    if (userToken) {
+      if (differenceInHours(Date.now(), userToken.createdAt) > 2) {
+        throw new AppError('Token expired.', 400);
+      }
+
+      const newPassword = await this.hash.generateHash(password);
+
+      const user = await this.user.alterPassword(userToken.userID, newPassword);
+
+      await this.userToken.deleteAll({
+        userID: userToken.userID,
+      });
+
+      return { ...user, password: undefined };
+    }
+
+    return null;
+  }
+
 }

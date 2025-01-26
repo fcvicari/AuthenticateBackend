@@ -28,4 +28,16 @@ export class UserRepository {
       },
     });
   }
+
+  async alterPassword(id: string, password: string): Promise<Users> {
+    return await this.prisma.users.update({
+      where: {
+        id,
+      },
+      data: {
+        password,
+        active: true,
+      },
+    });
+  }
 }

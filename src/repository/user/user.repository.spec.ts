@@ -88,4 +88,20 @@ describe('UserRepository Tests', () => {
     expect(user.active).toEqual(userData.active);
   });
 
+  it('Alter password', async () => {
+    const userData = {
+      id: 'userID',
+      email: 'jonhdoe@jonhdoe.com',
+      password: 'jonhdoe1234',
+      name: 'Jonh Doe New User',
+      active: true,
+    };
+
+    mockPrismaService.users.update.mockResolvedValue(userData);
+
+    const user = await userRepository.alterPassword('userID', 'jonhdoe1234');
+
+    expect(user.id).toEqual(userData.id);
+  });
+
 });

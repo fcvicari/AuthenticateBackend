@@ -1,7 +1,7 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { passwordHashMock } from "../../test/mocks/password.hash.mock";
 import { userMock, userServiceMock } from "../../test/mocks/user.repository.mock";
-import { userTokenServiceMock } from "../../test/mocks/userToken.repository.mock";
+import { userTokenMock, userTokenServiceMock } from "../../test/mocks/userToken.repository.mock";
 import { PrismaService } from "../database/prisma.service";
 import { SingupController } from "./singup.controller";
 
@@ -106,8 +106,37 @@ describe('SingupController Tests', () => {
 
       const result = await singupController.postRecoverPassword(body);
 
-      await expect(result).toEqual(true);
+      await expect(result?.recoveryToken).toEqual('userTokenMockID1');
     });
   });
 
+  describe('SingupController.postAlterPassword - Tests', () => {
+    it('Alter password - Nonexistent token', async () => {
+      const token = { token: 'userTokenMockNonexistent' };
+      const password = { password: 'newPassword' };
+
+      const result = await singupController.postAlterPassword(password, token);
+
+      await expect(result).toEqual(null);
+    });
+
+    it('Alter password - Expired token', async () => {
+      const token = { token: 'userTokenMockID1' };
+      const password = { password: 'newPassword' };
+
+      await expect(
+        singupController.postAlterPassword(password, token),
+      ).rejects.toHaveProperty('statusCode', 400);
+    });
+
+    it('Alter password - Successful', async () => {
+      const userToken = userTokenMock[1];
+      const token = { token: userToken.id };
+      const password = { password: 'newPassword' };
+
+      const result = await singupController.postAlterPassword(password, token);
+
+      await expect(result?.id).toEqual(userToken.userID);
+    });
+  });
 })
