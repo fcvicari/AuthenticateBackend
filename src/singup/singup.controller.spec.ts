@@ -1,6 +1,6 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { passwordHashMock } from "../../test/mocks/password.hash.mock";
-import { userServiceMock } from "../../test/mocks/user.repository.mock";
+import { userMock, userServiceMock } from "../../test/mocks/user.repository.mock";
 import { userTokenServiceMock } from "../../test/mocks/userToken.repository.mock";
 import { PrismaService } from "../database/prisma.service";
 import { SingupController } from "./singup.controller";
@@ -88,6 +88,25 @@ describe('SingupController Tests', () => {
 
       await expect(result?.id).toEqual('2');
       await expect(result?.active).toEqual(true);
+    });
+  });
+
+  describe('SingupController.postRecoverPassword - Tests', () => {
+    it('Recover Password - Nonexistent token', async () => {
+      const body = { email: 'nonexistentemail@nonexistentemail.com' };
+
+      const result = await singupController.postRecoverPassword(body);
+
+      await expect(result).toEqual(null);
+    });
+
+    it('Alter password - Successful', async () => {
+      const user = userMock[1];
+      const body = { email: user.email };
+
+      const result = await singupController.postRecoverPassword(body);
+
+      await expect(result).toEqual(true);
     });
   });
 

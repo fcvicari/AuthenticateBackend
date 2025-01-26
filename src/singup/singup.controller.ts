@@ -66,4 +66,27 @@ export class SingupController {
 
     return null;
   }
+
+  @Post('recoverpass')
+  async postRecoverPassword(@Body() body) {
+    const { email } = body;
+
+    const userExists = await this.user.findByEmail({ email });
+    if (userExists) {
+      await this.userToken.deleteAll({
+        userID: userExists.id,
+      });
+
+      const userToken = await this.userToken.create({
+        user: {
+          connect: userExists,
+        },
+      });
+
+      return { recoveryToken: userToken.id };
+    }
+
+    return null;
+  }
+
 }
