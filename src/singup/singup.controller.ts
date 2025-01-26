@@ -1,4 +1,5 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Query } from '@nestjs/common';
+import { differenceInHours } from 'date-fns';
 import { UserRepository } from '../repository/user/user.repository';
 import { UserTokenRepository } from '../repository/userToken/userToken.repository';
 import { AppError } from '../utils/app.erro';
@@ -33,13 +34,36 @@ export class SingupController {
       active: false,
     });
 
-    await this.userToken.create({
+    const usersToken = await this.userToken.create({
       user: { connect: userCreated },
     });
 
     return {
       ...userCreated,
       password: undefined,
+      activateToken: usersToken.id,
     };
+  }
+
+  @Post('activate')
+  async postActivateUser(@Query() query) {
+    const { token } = query;
+
+    const userToken = await this.userToken.findById({ id: token });
+    if (userToken) {
+      if (differenceInHours(Date.now(), userToken.createdAt) > 2) {
+        throw new AppError('Token expired.', 400);
+      }
+
+      const user = await this.user.activateUser(userToken.userID);
+
+      await this.userToken.deleteAll({
+        userID: userToken.userID,
+      });
+
+      return { ...user, password: undefined };
+    }
+
+    return null;
   }
 }

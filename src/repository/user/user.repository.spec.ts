@@ -20,6 +20,7 @@ describe('UserRepository Tests', () => {
         });
       }),
       findUnique: jest.fn(),
+      update: jest.fn(),
     },
   };
 
@@ -69,4 +70,22 @@ describe('UserRepository Tests', () => {
 
     expect(user?.id).toEqual(userData.id);
   });
+
+  it('User activation', async () => {
+    const userData = {
+      id: 'userID',
+      email: 'newjonhdoe@jonhdoe.com',
+      password: 'jonhdoe1234',
+      name: 'Jonh Doe New User',
+      active: true,
+    };
+
+    mockPrismaService.users.update.mockResolvedValue(userData);
+
+    const user = await userRepository.activateUser('userID');
+
+    expect(user.id).toEqual(userData.id);
+    expect(user.active).toEqual(userData.active);
+  });
+
 });

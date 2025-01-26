@@ -53,5 +53,17 @@ export const userServiceMock = {
         return Promise.resolve(null);
       }
     }),
+        activateUser: jest.fn().mockImplementation((id) => {
+      const userActivate = userMock.filter((user) => {
+        if (user.id === id) {
+          return user;
+        }
+      });
+      if (userActivate[0]) {
+        return Promise.resolve({ ...userActivate[0], active: true });
+      } else {
+        return Promise.resolve(null);
+      }
+    }),
   },
 };

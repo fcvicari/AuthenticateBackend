@@ -64,4 +64,31 @@ describe('SingupController Tests', () => {
     });
   });
 
+  describe('SingupController.postActivateUser - Tests', () => {
+    it('User activation - Nonexistent token', async () => {
+      const token = { token: 'userTokenMockNonexistent' };
+
+      const result = await singupController.postActivateUser(token);
+
+      await expect(result).toEqual(null);
+    });
+
+    it('User activation - Expired token', async () => {
+      const token = { token: 'userTokenMockID1' };
+
+      await expect(
+        singupController.postActivateUser(token),
+      ).rejects.toHaveProperty('statusCode', 400);
+    });
+
+    it('User activation - Successful', async () => {
+      const token = { token: 'userTokenMockID2' };
+
+      const result = await singupController.postActivateUser(token);
+
+      await expect(result?.id).toEqual('2');
+      await expect(result?.active).toEqual(true);
+    });
+  });
+
 })
