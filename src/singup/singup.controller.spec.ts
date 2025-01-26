@@ -1,6 +1,7 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { passwordHashMock } from "../../test/mocks/password.hash.mock";
 import { userServiceMock } from "../../test/mocks/user.repository.mock";
+import { userTokenServiceMock } from "../../test/mocks/userToken.repository.mock";
 import { PrismaService } from "../database/prisma.service";
 import { SingupController } from "./singup.controller";
 
@@ -13,6 +14,7 @@ describe('SingupController Tests', () => {
       providers: [
         passwordHashMock,
         userServiceMock,
+        userTokenServiceMock,
         {
           provide: PrismaService,
           useValue: {

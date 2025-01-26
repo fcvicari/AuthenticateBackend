@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from './app.module';
 import { PrismaService } from './database/prisma.service';
 import { UserRepository } from './repository/user/user.repository';
+import { UserTokenRepository } from './repository/userToken/userToken.repository';
 import { SingupController } from './singup/singup.controller';
 import { PasswordHash } from './utils/password.hash';
 
@@ -21,6 +22,11 @@ describe('AppModule Test', () => {
   it('should register UserRepository provider', () => {
     const userRepository = moduleRef.get<UserRepository>(UserRepository);
     expect(userRepository).toBeDefined();
+  });
+
+  it('should register UserTokenRepository provider', () => {
+    const userTokenRepository = moduleRef.get<UserTokenRepository>(UserTokenRepository);
+    expect(userTokenRepository).toBeDefined();
   });
 
   it('should register SingupController', () => {
