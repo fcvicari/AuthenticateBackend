@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { UserRepository } from 'src/repository/user/user.repository';
-import { AppError } from 'src/utils/app.erro';
-import { PasswordHash } from 'src/utils/password.hash';
+import { UserRepository } from '../../src/repository/user/user.repository';
+import { AppError } from '../../src/utils/app.erro';
+import { PasswordHash } from '../../src/utils/password.hash';
 import { SingUpDTO } from './singup.Dto';
 
 @Controller()
