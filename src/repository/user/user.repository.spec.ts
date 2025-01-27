@@ -119,4 +119,23 @@ describe('UserRepository Tests', () => {
 
     expect(user?.id).toEqual(userData.id);
   });
+
+  it('Update user', async () => {
+    const userData = {
+      id: 'userID',
+      email: 'jonhdoe@jonhdoe.com',
+      password: 'jonhdoe1234',
+      name: 'Jonh Doe New User',
+      active: true,
+    };
+
+    mockPrismaService.users.update.mockResolvedValue(userData);
+
+    const user = await userRepository.update({
+      data: { ...userData },
+      where: { id: 'userID' },
+    });
+
+    expect(user.id).toEqual(userData.id);
+  });
 });

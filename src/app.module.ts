@@ -5,6 +5,7 @@ import { UserRepository } from './repository/user/user.repository';
 import { UserTokenRepository } from './repository/userToken/userToken.repository';
 import { SingInController } from './singin/singin.controller';
 import { SingupController } from './singup/singup.controller';
+import { UserController } from './user/user.controller';
 import { PasswordHash } from './utils/password.hash';
 
 @Module({
@@ -15,7 +16,7 @@ import { PasswordHash } from './utils/password.hash';
       signOptions: { expiresIn: '12h' },
     }),
   ],
-  controllers: [SingupController, SingInController],
+  controllers: [SingupController, SingInController, UserController],
   providers: [PasswordHash, PrismaService, UserRepository, UserTokenRepository],
 })
 export class AppModule {}

@@ -89,5 +89,21 @@ export const userServiceMock = {
         return Promise.resolve(null);
       }
     }),
+    update: jest.fn().mockImplementation(({ where, data }) => {
+      const { id } = where;
+      const { name, email, avatar } = data;
+
+      const userActivate = userMock.filter((user) => {
+        if (user.id === id) {
+          return user;
+        }
+      });
+
+      if (userActivate[0]) {
+        return Promise.resolve({ ...userActivate[0], name, email, avatar });
+      } else {
+        return Promise.resolve(null);
+      }
+    }),
   },
 };

@@ -14,29 +14,33 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const token = this.extractTokenFromHeader(request);
-
     const UnauthorizedUser = 'Unauthorized user.';
 
-    if (!token) {
+    try {
+      const token = this.extractTokenFromHeader(request);
+      if (!token) {
+        throw new AppError(UnauthorizedUser, 401);
+      }
+
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: process.env.JWT_SECRET,
+      });
+
+      const existsUser = await this.user.getUniqueById({ id: payload.id });
+      if (!existsUser) {
+        throw new AppError(UnauthorizedUser, 401);
+      }
+
+      if (existsUser.email !== payload.email) {
+        throw new AppError(UnauthorizedUser, 401);
+      }
+
+      request['user'] = payload;
+      return true;
+
+    } catch (error) {
       throw new AppError(UnauthorizedUser, 401);
     }
-
-    const payload = await this.jwtService.verifyAsync(token, {
-      secret: process.env.JWT_SECRET,
-    });
-
-    const existsUser = await this.user.getUniqueById({ id: payload.id });
-    if (!existsUser) {
-      throw new AppError(UnauthorizedUser, 401);
-    }
-
-    if (existsUser.email !== payload.email) {
-      throw new AppError(UnauthorizedUser, 401);
-    }
-
-    request['user'] = payload;
-    return true;
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {

@@ -45,4 +45,15 @@ export class UserRepository {
     return await this.prisma.users.findUnique({ where });
   }
 
+  async update(params: {
+    where: Prisma.UsersWhereUniqueInput;
+    data: Prisma.UsersUpdateInput;
+  }): Promise<Users> {
+    const { data, where } = params;
+
+    return await this.prisma.users.update({
+      data,
+      where,
+    });
+  }
 }
