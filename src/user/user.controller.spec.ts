@@ -121,4 +121,14 @@ describe('UserController Tests', () => {
     expect(updateUser.id).toEqual('1');
   });
 
+  it('Delete user - id does not exist', async () => {
+    await expect(
+      userController.deleteUser('idNotExists'),
+    ).rejects.toHaveProperty('statusCode', 400);
+  });
+
+  it('Delete user - success', async () => {
+    expect(await userController.deleteUser('1')).toEqual(true);
+  });
+
 });

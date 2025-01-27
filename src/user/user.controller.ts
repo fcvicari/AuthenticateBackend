@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Param,
   Post,
   Put,
@@ -97,5 +98,19 @@ export class UserController {
       ...userUpdated,
       password: undefined,
     };
+  }
+
+  @Delete(':id')
+  async deleteUser(@Param('id') id: string) {
+    const userExists = await this.user.getUniqueById({ id });
+    if (!userExists) {
+      throw new AppError(UserNotFound, 400);
+    }
+
+    await this.user.delete({
+      id,
+    });
+
+    return true;
   }
 }

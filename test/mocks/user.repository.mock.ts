@@ -105,5 +105,6 @@ export const userServiceMock = {
         return Promise.resolve(null);
       }
     }),
+    delete: jest.fn().mockResolvedValue(true),
   },
 };

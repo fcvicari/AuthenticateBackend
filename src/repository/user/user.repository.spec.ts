@@ -21,6 +21,7 @@ describe('UserRepository Tests', () => {
       }),
       findUnique: jest.fn(),
       update: jest.fn(),
+      delete: jest.fn(),
     },
   };
 
@@ -137,5 +138,15 @@ describe('UserRepository Tests', () => {
     });
 
     expect(user.id).toEqual(userData.id);
+  });
+
+  it('Delete user', async () => {
+    mockPrismaService.users.delete.mockResolvedValue(null);
+
+    await userRepository.delete({ id: 'userID' });
+
+    expect(prismaService.users.delete).toHaveBeenCalledWith({
+      where: { id: 'userID' },
+    });
   });
 });

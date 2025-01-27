@@ -56,4 +56,11 @@ export class UserRepository {
       where,
     });
   }
+
+  async delete(where: Prisma.UsersWhereUniqueInput): Promise<any> {
+    await this.prisma.users.delete({
+      where,
+    });
+  }
+
 }
