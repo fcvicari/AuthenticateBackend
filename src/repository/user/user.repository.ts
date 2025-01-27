@@ -40,4 +40,9 @@ export class UserRepository {
       },
     });
   }
+
+  async getUniqueById(where: Prisma.UsersWhereUniqueInput): Promise<Users|null> {
+    return await this.prisma.users.findUnique({ where });
+  }
+
 }

@@ -104,4 +104,19 @@ describe('UserRepository Tests', () => {
     expect(user.id).toEqual(userData.id);
   });
 
+  it('Get user by ID', async () => {
+    const userData = {
+      id: 'userID',
+      email: 'newjonhdoe@jonhdoe.com',
+      password: 'jonhdoe1234',
+      name: 'Jonh Doe New User',
+      active: true,
+    };
+
+    mockPrismaService.users.findUnique.mockResolvedValue(userData);
+
+    const user = await userRepository.getUniqueById({ id: 'userID' });
+
+    expect(user?.id).toEqual(userData.id);
+  });
 });
