@@ -29,3 +29,17 @@ $ yarn start:dev
 $ yarn build
 $ yarn start
 ```
+
+## Future Implementations
+
+To enhance the project's functionality and user experience, the following features could be added:
+
+1. **Email Sending for User Actions**:  
+   Implement email notifications for key actions, such as:  
+   - Confirming user registration.  
+   - Supporting the "Forgot Password" process to reset user credentials.
+
+2. **Email Template Utilization**:  
+   Introduce customizable email templates to ensure consistency in communication, improve efficiency, and provide a professional appearance for all automated emails.
+
+These improvements would strengthen the platform's reliability and overall usability.
